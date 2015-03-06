@@ -1,9 +1,13 @@
-/.idea/
-/project/boot/
-/project/plugins/project
+# sbt specific
+console.devmode.log
 target/
-lib_managed/
-src_managed/
-test-output/
+project/target/
+
+# eclipse stuff
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA stuff
 *.iml
-.classpath_nb
+.idea/
