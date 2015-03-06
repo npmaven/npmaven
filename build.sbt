@@ -35,20 +35,6 @@ libraryDependencies ++= {
   )
 }
 
-// Borrowed from https://github.com/vn971/roboCup
-assemblyJarName := "npmaven.jar"
-
-resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (managedBase, base) =>
-	val webappBase = base / "src" / "main" / "webapp"
-	for {
-		(from, to) <- webappBase ** "*" pair rebase(webappBase, managedBase / "main" / "webapp")
-	} yield {
-		Sync.copy(from, to)
-		to
-	}
-}
-
-
 packageArchetype.java_application
 
 bashScriptConfigLocation := Some("${app_home}/../conf/jvmopts")
