@@ -67,10 +67,3 @@ herokuConfigVars in Compile := Map(
 )
 
 herokuStack in Compile := "cedar-14"
-
-herokuProcessTypes in Compile := Map(
-  "web" -> "java -jar target/scala-2.11/npmaven.jar"
-)
-
-// Make stage build the fat assembly jar
-stage <<= stage dependsOn assembly
