@@ -1,1 +1,1 @@
-jetty.port=80
+jetty.port=$PORT
