@@ -1,1 +1,1 @@
-web: java -jar target\scala-2.11\npmaven.jar
+web: java -jar target/scala-2.11/npmaven.jar
