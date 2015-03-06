@@ -1,3 +1,5 @@
+import NativePackagerKeys._
+
 name := "npmaven"
 
 version := "0.0.1"
@@ -36,16 +38,6 @@ libraryDependencies ++= {
 // Borrowed from https://github.com/vn971/roboCup
 assemblyJarName := "npmaven.jar"
 
-packageDescription <+= description
-
-packageSummary <+= description
-
-serverLoading in Debian := com.typesafe.sbt.packager.archetypes.ServerLoader.SystemV
-
-bashScriptExtraDefines += "addJava '-Drun.mode=production'" // for liftweb
-
-enablePlugins(JavaServerAppPackaging)
-
 resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (managedBase, base) =>
 	val webappBase = base / "src" / "main" / "webapp"
 	for {
@@ -57,7 +49,10 @@ resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (manage
 }
 
 
-stage <<= stage dependsOn assembly
+packageArchetype.java_application
+
+//stage <<= stage dependsOn assembly
 
 // Skips test in assembly. Not needed since we codeship.
-test in assembly := {}
+Keys.test in assembly := {}
+
