@@ -56,14 +56,3 @@ resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (manage
 	}
 }
 
-
-// https://github.com/heroku/sbt-heroku
-herokuAppName in Compile := "npmaven"
-
-herokuJdkVersion in Compile := "1.8"
-
-herokuConfigVars in Compile := Map(
-  "JAVA_OPTS" -> "-Drun.mode=production"
-)
-
-herokuStack in Compile := "cedar-14"
