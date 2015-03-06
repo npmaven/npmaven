@@ -51,8 +51,4 @@ resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (manage
 
 packageArchetype.java_application
 
-//stage <<= stage dependsOn assembly
-
-// Skips test in assembly. Not needed since we codeship.
-Keys.test in assembly := {}
-
+bashScriptConfigLocation := Some("${app_home}/../conf/jvmopts")
