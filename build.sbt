@@ -58,3 +58,6 @@ resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (manage
 
 
 stage <<= stage dependsOn assembly
+
+// Skips test in assembly. Not needed since we codeship.
+test in assembly := {}
