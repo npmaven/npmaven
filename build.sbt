@@ -56,3 +56,5 @@ resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (manage
 	}
 }
 
+
+stage <<= stage dependsOn assembly
