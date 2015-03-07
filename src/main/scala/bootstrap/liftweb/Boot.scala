@@ -26,8 +26,9 @@ class Boot {
 
       // more complex because this menu allows anything in the
       // /static path to be visible
-      Menu(Loc("Static", Link(List("static"), true, "/static/index"),
-	       "Static Content")))
+      Menu(Loc("npmaven", new Link(List("site"), true), "npmaven")
+      )
+    )
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
@@ -48,6 +49,5 @@ class Boot {
     LiftRules.jsArtifacts = JQueryArtifacts
     JQueryModule.InitParam.JQuery=JQueryModule.JQuery191
     JQueryModule.init()
-
   }
 }

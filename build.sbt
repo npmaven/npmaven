@@ -38,3 +38,10 @@ libraryDependencies ++= {
 packageArchetype.java_application
 
 bashScriptConfigLocation := Some("${app_home}/../conf/jvmopts")
+
+// So we can build src/pamflet
+site.settings
+
+site.pamfletSupport()
+
+(webappResources in Compile) <+= (resourceManaged in Compile)
