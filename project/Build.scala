@@ -28,7 +28,7 @@ object RootBuild extends Build {
         liftEdition <<= liftVersion { _.substring(0,3) },
         generateSite,
         generateSiteTaskKey <<= generateSiteTaskKey dependsOn makeSite,
-        compile in Compile <<= compile in Compile dependsOn generateSiteTaskKey
+        resourceGenerators in Compile <+= generateSiteTaskKey
       )
   )
 }
