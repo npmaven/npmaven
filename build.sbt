@@ -59,4 +59,4 @@ site.settings
 
 site.pamfletSupport()
 
-(webappResources in Compile) <+= (resourceManaged in Compile)
+(webappResources in Compile) <+= (resourceManaged in Compile) { _ / "webapp" }
