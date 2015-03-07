@@ -20,18 +20,10 @@ class Boot {
     LiftRules.addToPackages("org.npmaven")
 
     // Build SiteMap
-    val redirectIndex = EarlyResponse(() => {
-      S redirectTo "/site/npmaven.html"
-    })
-
     val entries = List(
-      Menu(Loc("index", List("index"), "index", redirectIndex)),
       // Allows everything in /site (created by Pamflet) to be exposed.
       Menu(Loc("npmaven", new Link(List("site"), true), "npmaven"))
     )
-
-    // set the sitemap.  Note if you don't want access control for
-    // each page, just comment this line out.
     LiftRules.setSiteMap(SiteMap(entries:_*))
 
     // Force the request to be UTF-8
@@ -46,17 +38,16 @@ class Boot {
       )
     )
 
-//    LiftRules.statelessRewrite.prepend {
-//      // Point / at the npmaven.html from Pamflet
-//      case RewriteRequest(ParsePath("index" :: Nil, ext, _, _), _, _) =>
-//        RewriteResponse("site" :: "npmaven" :: Nil, "html")
-//
-//      // Slaps /site on the front of most everything
-//      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _)
-//        if head != "site" // To avoid infinite recursion
-//        && head != "repo" // To avoid screwing up the repos
-//      => RewriteResponse("site" :: head :: path, ext)
-//    }
+    LiftRules.statelessRewrite.prepend {
+      // Point / at the npmaven.html from Pamflet
+      case RewriteRequest(ParsePath("index" :: Nil, ext, _, _), _, _) =>
+        RewriteResponse("site" :: "npmaven" :: Nil, "html")
+
+      // Slaps /site on the front of most everything
+      case RewriteRequest(ParsePath(head :: path, "html", _, _), _, _)
+        if head != "site" // To avoid infinite recursion
+      => RewriteResponse("site" :: head :: path, "html")
+    }
 
     LiftRules.statelessDispatch.append(NpmRest)
   }

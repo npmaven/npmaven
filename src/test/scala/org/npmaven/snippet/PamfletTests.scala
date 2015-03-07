@@ -11,7 +11,8 @@ object PamfletTests extends Specification with XmlMatchers {
       val template = <html>
         <head></head>
         <body>
-          <a href="http://github.com/joescii/npmaven" class="fork nav"><img src="img/fork.png" alt="Fork me on GitHub"/></a>
+          <a href="http://github.com/joescii/npmaven" class="fork nav"></a>
+          <h1 id="npmaven">npmaven<a href="#npmaven" class="header-link"><span class="header-link-content">&nbsp;</span></a></h1>
         </body>
       </html>
 
@@ -42,6 +43,65 @@ object PamfletTests extends Specification with XmlMatchers {
       </html>
 
       Pamflet(template(a1Before, a2Before)) must ==/ (template(a1After, a2After))
+    }
+
+    "prepend all css sources with 'site'" in {
+      val h1Before = "css/blueprint/screen.css"
+      val h2Before = "css/blueprint/grid.css"
+      val h3Before = "css/blueprint/print.css"
+
+      val h1After = "site/css/blueprint/screen.css"
+      val h2After = "site/css/blueprint/grid.css"
+      val h3After = "site/css/blueprint/print.css"
+
+      def template(href1:String, href2:String, href3:String) = <html>
+        <head>
+          <link rel="stylesheet" href={href1} type="text/css" media="screen, projection"/>
+          <link rel="stylesheet" href={href2} type="text/css" media="screen and (min-device-width: 800px), projection"/>
+          <link rel="stylesheet" href={href3} type="text/css" media="print"/>
+        </head>
+        <body></body>
+      </html>
+
+      Pamflet(template(h1Before, h2Before, h3Before)) must ==/ (template(h1After, h2After, h3After))
+    }
+
+    "prepend all js sources with 'site'" in {
+      val src1Before = "js/jquery-1.6.2.min.js"
+      val src2Before = "js/jquery.collapse.js"
+      val src3Before = "js/pamflet.js"
+
+      val src1After = "site/js/jquery-1.6.2.min.js"
+      val src2After = "site/js/jquery.collapse.js"
+      val src3After = "site/js/pamflet.js"
+
+      def template(src1:String, src2:String, src3:String) = <html>
+        <head>
+          <script type="text/javascript" src={src1}></script>
+          <script type="text/javascript" src={src2}></script>
+          <script type="text/javascript" src={src3}></script>
+          <script type="text/javascript">
+            Pamflet.page.language = 'en';
+          </script>
+        </head>
+        <body></body>
+      </html>
+
+      Pamflet(template(src1Before, src2Before, src3Before)) must ==/ (template(src1After, src2After, src3After))
+    }
+
+    "prepend all img sources with 'site'" in {
+      val srcBefore = "img/fork.png"
+      val srcAfter = "site/img/fork.png"
+
+      def template(src:String) = <html>
+        <head></head>
+        <body>
+          <a href="http://github.com/joescii/npmaven" class="fork nav"><img src={src} alt="Fork me on GitHub"/></a>
+        </body>
+      </html>
+
+      Pamflet(template(srcBefore)) must ==/ (template(srcAfter))
     }
   }
 
