@@ -62,5 +62,10 @@ class Boot {
         Pamflet(_)
       )
     )
+
+    LiftRules.statelessRewrite.prepend {
+      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _) if head != "site" =>
+        RewriteResponse("site" :: head :: path, ext)
+    }
   }
 }
