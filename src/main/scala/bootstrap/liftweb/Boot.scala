@@ -3,6 +3,7 @@ package bootstrap.liftweb
 import java.io.InputStream
 
 import net.liftweb._
+import org.npmaven.rest.NpmRest
 import org.npmaven.snippet.Pamflet
 import util._
 import Helpers._
@@ -52,6 +53,7 @@ class Boot {
     JQueryModule.InitParam.JQuery=JQueryModule.JQuery191
     JQueryModule.init()
 
+    // For correcting the +'s in Pamflet's links
     LiftRules.contentParsers = List(
       ContentParser(
         Seq("html", "xhtml", "htm"),
@@ -65,9 +67,13 @@ class Boot {
       case RewriteRequest(ParsePath("index" :: Nil, ext, _, _), _, _) =>
         RewriteResponse("site" :: "npmaven" :: Nil, "html")
 
-      // Slaps /site on the front of everything, being careful to not to recurse infinitely
-      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _) if head != "site" =>
-        RewriteResponse("site" :: head :: path, ext)
+      // Slaps /site on the front of most everything
+      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _)
+        if head != "site" // To avoid infinite recursion
+        && head != "repo" // To avoid screwing up the repos
+      => RewriteResponse("site" :: head :: path, ext)
     }
+
+    LiftRules.statelessDispatch.append(NpmRest)
   }
 }
