@@ -3,6 +3,7 @@ package bootstrap.liftweb
 import java.io.InputStream
 
 import net.liftweb._
+import org.npmaven.rest.NpmRest
 import org.npmaven.snippet.Pamflet
 import util._
 import Helpers._
@@ -24,6 +25,17 @@ class Boot {
   def boot {
     // where to search snippet
     LiftRules.addToPackages("org.npmaven")
+
+    // Build SiteMap
+    val entries = List(
+      // Allows everything in /site (created by Pamflet) to be exposed.
+      Menu(Loc("npmaven", new Link(List("site"), true), "npmaven")
+      )
+    )
+
+    // set the sitemap.  Note if you don't want access control for
+    // each page, just comment this line out.
+    LiftRules.setSiteMap(SiteMap(entries:_*))
 
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =
@@ -49,5 +61,19 @@ class Boot {
         Pamflet(_)
       )
     )
+
+    LiftRules.statelessRewrite.prepend {
+      // Point / at the npmaven.html from Pamflet
+      case RewriteRequest(ParsePath("index" :: Nil, ext, _, _), _, _) =>
+        RewriteResponse("site" :: "npmaven" :: Nil, "html")
+
+      // Slaps /site on the front of most everything
+      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _)
+        if head != "site" // To avoid infinite recursion
+        && head != "repo" // To avoid screwing up the repos
+      => RewriteResponse("site" :: head :: path, ext)
+    }
+
+    LiftRules.statelessDispatch.append(NpmRest)
   }
 }
