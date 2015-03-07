@@ -18,7 +18,7 @@ import net.liftweb.http.js.jquery._
 class Boot {
   def boot {
     // where to search snippet
-    LiftRules.addToPackages("code")
+    LiftRules.addToPackages("org.npmaven")
 
     // Build SiteMap
     val entries = List(

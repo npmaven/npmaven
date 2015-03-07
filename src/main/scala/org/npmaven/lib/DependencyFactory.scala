@@ -1,4 +1,4 @@
-package code
+package org.npmaven
 package lib
 
 import net.liftweb._
