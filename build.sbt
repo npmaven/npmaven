@@ -9,8 +9,9 @@ organization := "org.npmaven"
 scalaVersion := "2.11.6"
 
 resolvers ++= Seq(
-  "snapshots"     at "https://oss.sonatype.org/content/repositories/snapshots",
-  "releases"        at "https://oss.sonatype.org/content/repositories/releases"
+  "snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+  "releases"  at "https://oss.sonatype.org/content/repositories/releases",
+  "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases" // For specs2 3.0
 )
 
 seq(webSettings :_*)
@@ -18,6 +19,8 @@ seq(webSettings :_*)
 unmanagedResourceDirectories in Test <+= (baseDirectory) { _ / "src/main/webapp" }
 
 scalacOptions ++= Seq("-deprecation", "-unchecked")
+
+scalacOptions in Test ++= Seq("-Yrangepos") // Recommended for specs2 3.0
 
 liftVersion <<= liftVersion ?? "3.0-M3"
 
@@ -31,7 +34,8 @@ libraryDependencies ++= {
     "org.eclipse.jetty"       % "jetty-plus"                % "9.2.7.v20150116"     % "container,test", // For Jetty Config
     "org.eclipse.jetty.orbit" % "javax.servlet"             % "3.0.0.v201112011016" % "container,test" artifacts Artifact("javax.servlet", "jar", "jar"),
     "ch.qos.logback"          % "logback-classic"           % "1.0.6"               % "runtime",
-    "org.specs2"              %% "specs2"                   % "2.3.12"              % "test"
+    "org.specs2"              %% "specs2-core"              % "3.0"                 % "test",
+    "org.specs2"              %% "specs2-matcher-extra"     % "3.0"                 % "test"   // For XmlMatchers
   )
 }
 

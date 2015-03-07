@@ -1,15 +1,20 @@
 package bootstrap.liftweb
 
+import java.io.InputStream
+
 import net.liftweb._
+import org.npmaven.snippet.Pamflet
 import util._
 import Helpers._
 
 import common._
-import http._
+import net.liftweb.http._
 import sitemap._
 import Loc._
 import net.liftmodules.JQueryModule
 import net.liftweb.http.js.jquery._
+
+import scala.xml.NodeSeq
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -49,5 +54,13 @@ class Boot {
     LiftRules.jsArtifacts = JQueryArtifacts
     JQueryModule.InitParam.JQuery=JQueryModule.JQuery191
     JQueryModule.init()
+
+    LiftRules.contentParsers = List(
+      ContentParser(
+        Seq("html", "xhtml", "htm"),
+        (content:InputStream) => S.htmlProperties.htmlParser(content),
+        Pamflet(_)
+      )
+    )
   }
 }
