@@ -1,23 +1,28 @@
 package org.npmaven
 package rest
 
-import org.npmaven.model.{Artifact, Package}
+import model.{Artifact, Package}
+import commonjs. {Registry => NpmRegistry}
+import util.FutureConversions._
 
-import net.liftweb.common.{Full, Loggable}
-import net.liftweb.http.{LiftResponse, XmlResponse, S, NotFoundResponse}
+import net.liftweb.common.Loggable
+import net.liftweb.http.{XmlResponse, S, NotFoundResponse}
 import net.liftweb.http.rest.RestHelper
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object NpmRest extends RestHelper with Loggable {
+  lazy val npm = new NpmRegistry("registry.npmjs.org/"
+  )
   serve {
     case "repo" :: "npm" :: "org" :: "npmaven" :: name :: version :: artifact :: Nil XmlReq _ => {
       val pkg = Package(name, version)
       val art = Artifact(artifact)
       println(S.request)
 
-      val res:LiftResponse = if(name == "angular") XmlResponse(<project></project>)
-      else NotFoundResponse()
-
-      Full(res)
+      npm.get(pkg)
+        .map(_ => XmlResponse(<project></project>))
+        .recover{case e:Exception => e.printStackTrace(); NotFoundResponse()}
+        .la
     }
   }
 }
