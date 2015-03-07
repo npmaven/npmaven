@@ -27,10 +27,7 @@ class Boot {
 
     // Build SiteMap
     val entries = List(
-      Menu.i("Home") / "index", // the simple way to declare a menu
-
-      // more complex because this menu allows anything in the
-      // /static path to be visible
+      // Allows everything in /site (created by Pamflet) to be exposed.
       Menu(Loc("npmaven", new Link(List("site"), true), "npmaven")
       )
     )
@@ -64,6 +61,11 @@ class Boot {
     )
 
     LiftRules.statelessRewrite.prepend {
+      // Point / at the npmaven.html from Pamflet
+      case RewriteRequest(ParsePath("index" :: Nil, ext, _, _), _, _) =>
+        RewriteResponse("site" :: "npmaven" :: Nil, "html")
+
+      // Slaps /site on the front of everything, being careful to not to recurse infinitely
       case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _) if head != "site" =>
         RewriteResponse("site" :: head :: path, ext)
     }
