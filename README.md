@@ -5,7 +5,7 @@ npmaven
 
 **COMING SOON!**
 
-The scratch work is running at [npmaven.org](http://npmaven.org), but don't expect anything just yet.
+The scratch work is running at [www.npmaven.org](http://www.npmaven.org), but don't expect anything just yet.
 
 ## Community
 Pitch in on the effort to deliver *npmaven* in our [Google group](https://groups.google.com/forum/#!forum/npmaven)
