@@ -3,3 +3,6 @@
 *npmaven* is a web service for delivering npm packages as Maven artifacts
 
 **COMING SOON!**
+
+## Community
+Pitch in on the effort to deliver *npmaven* in our [Google group]($community$)
