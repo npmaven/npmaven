@@ -41,6 +41,17 @@ libraryDependencies ++= {
 
 packageArchetype.java_application
 
+// Drops all of the webapp stuff in the /webapp on the classpath for the jetty WebAppContext to find
+resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map { (managedBase, base) =>
+  val webappBase = base / "src" / "main" / "webapp"
+  for {
+    (from, to) <- webappBase ** "*" pair rebase(webappBase, managedBase / "main" / "webapp")
+  } yield {
+    Sync.copy(from, to)
+    to
+  }
+}
+
 bashScriptConfigLocation := Some("${app_home}/../conf/jvmopts")
 
 // So we can build src/pamflet
