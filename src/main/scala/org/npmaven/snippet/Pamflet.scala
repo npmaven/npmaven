@@ -14,7 +14,8 @@ object Pamflet {
   private val fixAnchors: NodeSeq => NodeSeq = ("a" #> { anchor:NodeSeq =>
     val href = (anchor \ "@href").toString()
     val replace = "a [href]" #> href
-      .replaceAllLiterally("+", "%2B") // Fix the links with +'s
+      .replaceAllLiterally("+", "%2B")     // Fix the links with +'s
+      .replaceAll("^npmaven\\.html$", ".") // Make npmaven.html links go to the root of this context
     replace(anchor)
   })
 
