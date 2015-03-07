@@ -41,17 +41,17 @@ class Boot {
       )
     )
 
-    LiftRules.statelessRewrite.prepend {
-      // Point / at the npmaven.html from Pamflet
-      case RewriteRequest(ParsePath("index" :: Nil, ext, _, _), _, _) =>
-        RewriteResponse("site" :: "npmaven" :: Nil, "html")
-
-      // Slaps /site on the front of most everything
-      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _)
-        if head != "site" // To avoid infinite recursion
-        && head != "repo" // To avoid screwing up the repos
-      => RewriteResponse("site" :: head :: path, ext)
-    }
+//    LiftRules.statelessRewrite.prepend {
+//      // Point / at the npmaven.html from Pamflet
+//      case RewriteRequest(ParsePath("index" :: Nil, ext, _, _), _, _) =>
+//        RewriteResponse("site" :: "npmaven" :: Nil, "html")
+//
+//      // Slaps /site on the front of most everything
+//      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _)
+//        if head != "site" // To avoid infinite recursion
+//        && head != "repo" // To avoid screwing up the repos
+//      => RewriteResponse("site" :: head :: path, ext)
+//    }
 
     LiftRules.statelessDispatch.append(NpmRest)
   }
