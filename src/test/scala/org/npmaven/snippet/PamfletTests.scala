@@ -19,7 +19,7 @@ object PamfletTests extends Specification with XmlMatchers {
       Pamflet(template) must ==/ (template)
     }
 
-    "replace all +'s in an anchor with %2B's" in {
+    "replace all +'s in an anchor before a hash with %2B's" in {
       val a1Before = <a href="Contents+in+Depth.html">Contents in Depth</a>
       val a2Before = <a href="Combined+Pages.html">Combined Pages</a>
       val a1After = <a href="Contents%2Bin%2BDepth.html">Contents in Depth</a>
@@ -43,6 +43,17 @@ object PamfletTests extends Specification with XmlMatchers {
       </html>
 
       Pamflet(template(a1Before, a2Before)) must ==/ (template(a1After, a2After))
+    }
+
+    "NOT replace any +'s in an anchor after the hash" in {
+      def template(href:String) = <html>
+        <head></head>
+        <body>
+          <div><a href={href}>npmaven</a></div><ul class="outline"> <li> <a href={href+"#Community"}>Community </a> </li><li> <a href={href+"#Build+Status"}>Build Status </a> </li> </ul><ol class="toc"> <li class="generated"><div class="current">Contents in Depth</div></li><li class="generated"><div><a href={href}>Combined Pages</a></div></li> </ol>
+        </body>
+      </html>
+
+      Pamflet(template("Combined+Pages.html")) must ==/ (template("Combined%2BPages.html"))
     }
 
     "prepend all css sources with 'site'" in {
@@ -104,7 +115,7 @@ object PamfletTests extends Specification with XmlMatchers {
       Pamflet(template(srcBefore)) must ==/ (template(srcAfter))
     }
 
-    "replace all 'pamplet.html' in an anchor with ''" in {
+    "replace all 'pamplet.html' in an anchor with '.'" in {
       def template(href:String) = <html>
         <head></head>
         <body>
