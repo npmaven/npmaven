@@ -7,7 +7,7 @@ import org.npmaven.snippet.Pamflet
 
 import net.liftweb._
 import http._
-import sitemap._
+import net.liftweb.sitemap._
 import Loc._
 
 /**
@@ -20,7 +20,12 @@ class Boot {
     LiftRules.addToPackages("org.npmaven")
 
     // Build SiteMap
+    val redirectIndex = EarlyResponse(() => {
+      S redirectTo "/site/npmaven.html"
+    })
+
     val entries = List(
+      Menu(Loc("index", List("index"), "index", redirectIndex)),
       // Allows everything in /site (created by Pamflet) to be exposed.
       Menu(Loc("npmaven", new Link(List("site"), true), "npmaven"))
     )
