@@ -104,18 +104,20 @@ object PamfletTests extends Specification with XmlMatchers {
       Pamflet(template(srcBefore)) must ==/ (template(srcAfter))
     }
 
-    "replace all 'pamplet.html' in an anchor with '.'" in {
+    "replace all 'pamplet.html' in an anchor with ''" in {
       def template(href:String) = <html>
         <head></head>
         <body>
           <a class="page prev nav" href={href}>
             <span class="space">&nbsp;</span>
             <span class="flip arrow">❧</span>
-          </a><a class="page next nav" href="SomethingElse.html">
-          <span class="space">&nbsp;</span>
-          <span class="arrow">❧</span>
-        </a>
+          </a>
+          <a class="page next nav" href="SomethingElse.html">
+            <span class="space">&nbsp;</span>
+            <span class="arrow">❧</span>
+          </a>
           <div><a href={href}>npmaven</a></div><ol class="toc"> <li class="generated"><div class="current">Contents in Depth</div></li><li class="generated"><div><a href="SomethingElse.html">Combined Pages</a></div></li> </ol>
+          <div><a href={href}>npmaven</a></div><ul class="outline"> <li> <a href={href+"#Community"}>Community </a> </li><li> <a href={href+"#BuildStatus"}>Build Status </a> </li> </ul><ol class="toc"> <li class="generated"><div class="current">Contents in Depth</div></li><li class="generated"><div><a href="SomethingElse.html">Combined Pages</a></div></li> </ol>
         </body>
       </html>
 
