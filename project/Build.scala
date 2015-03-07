@@ -16,8 +16,8 @@ object RootBuild extends Build {
 
   val generateSite = generateSiteTaskKey <<= (resourceManaged in Compile, siteDirectory) map { (rsrc: File, site: File) =>
     val relPaths = site.listFiles() flatMap listRecursively
-    IO.copyDirectory(site, rsrc)
-    relPaths.map(name => new File(rsrc, name))
+    IO.copyDirectory(site, rsrc / "site")
+    relPaths.map(name => new File(rsrc / "site", name))
   }
 
   lazy val project = Project(
