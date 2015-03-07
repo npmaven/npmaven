@@ -25,20 +25,6 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("org.npmaven")
 
-    // Build SiteMap
-    val entries = List(
-      Menu.i("Home") / "index", // the simple way to declare a menu
-
-      // more complex because this menu allows anything in the
-      // /static path to be visible
-      Menu(Loc("npmaven", new Link(List("site"), true), "npmaven")
-      )
-    )
-
-    // set the sitemap.  Note if you don't want access control for
-    // each page, just comment this line out.
-    LiftRules.setSiteMap(SiteMap(entries:_*))
-
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =
       Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
@@ -55,6 +41,7 @@ class Boot {
     JQueryModule.InitParam.JQuery=JQueryModule.JQuery191
     JQueryModule.init()
 
+    // For fixing the +'s in Pamflet's URLs
     LiftRules.contentParsers = List(
       ContentParser(
         Seq("html", "xhtml", "htm"),
