@@ -3,7 +3,6 @@ package artifacts
 
 import net.liftweb.common.Full
 import net.liftweb.http.LiftRules
-import util.Data._
 import org.specs2.mutable.Specification
 
 object ArtifactorySha1Specs extends Specification {
