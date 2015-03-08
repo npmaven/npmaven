@@ -17,12 +17,14 @@ object NpmRest extends RestHelper with Loggable {
     case "repo" :: "npm" :: "org" :: "npmaven" :: name :: version :: artifact :: Nil XmlReq _ => {
       val pkg = Package(name, version)
       val art = Artifact(artifact)
-      println(S.request)
+      logger.trace(S.request)
 
-      npm.get(pkg)
+      val f = npm.get(pkg)
         .map(_ => XmlResponse(<project></project>))
-        .recover{case e:Exception => e.printStackTrace(); NotFoundResponse()}
+        .recover{case e:Exception => logger.trace(e); NotFoundResponse()}
         .la
+
+      f
     }
   }
 }
