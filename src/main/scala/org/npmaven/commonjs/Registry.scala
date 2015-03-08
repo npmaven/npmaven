@@ -4,10 +4,10 @@ package commonjs
 import model._
 import dispatch._
 import net.liftweb.common.Loggable
-import net.liftweb.json._
-import scala.concurrent.ExecutionContext.Implicits.global
 
-class Registry(url:String) extends Loggable {
+import scala.concurrent.ExecutionContext
+
+class Registry(url:String)(implicit ec:ExecutionContext) extends Loggable {
   val host = dispatch.host(url)
 
   def get(pkg:Package):Future[Package] = {
