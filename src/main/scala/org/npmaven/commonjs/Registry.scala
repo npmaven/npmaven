@@ -18,7 +18,7 @@ class Registry(url:String) extends Loggable {
     logger.trace("Getting "+req)
 
     Http(req OK as.String).flatMap { json =>
-      logger.trace("Reponse => "+json)
+      logger.trace("Response => "+json)
       Package(json) match {
         case Some(p:Package) => Future.successful(p)
         case _ => Future.failed(new Exception("Service did not return a valid JSON object"))
