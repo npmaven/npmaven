@@ -1,9 +1,31 @@
 package org.npmaven
 
-import net.liftweb.common.{Failure, Full, Box}
+import net.liftweb.common.{Empty, Failure, Full, Box}
 
 package object model {
-  case class Package(name:String, version:String)
+  case class Distribution(shasum:String, tarball:String)
+  case class Package(
+    name:String,
+    version:String,
+    main:Option[String] = None,
+    license:Option[String] = None,
+    dist:Option[Distribution] = None
+  )
+
+  object Package {
+    import net.liftweb.json
+    import net.liftweb.json._
+
+    implicit val formats = json.DefaultFormats
+    def apply(string:String):Option[Package] = parseOpt(string).flatMap { json =>
+      json match {
+        case obj:JObject => apply(obj)
+        case _ => None
+      }
+    }
+    def apply(json:JObject):Option[Package] = json.extractOpt[Package]
+  }
+
 
   sealed trait Artifact
   case object Pom extends Artifact
