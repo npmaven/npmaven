@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class Registry(url:String) extends Loggable {
   val host = dispatch.host(url)
 
-  def get(pkg:Package):Future[JObject] = {
+  def get(pkg:Package):Future[Package] = {
     val req = (host / pkg.name / pkg.version)
       .setContentType("application/json", "UTF-8")
       .GET
@@ -19,8 +19,8 @@ class Registry(url:String) extends Loggable {
 
     Http(req OK as.String).flatMap { json =>
       logger.trace("Reponse => "+json)
-      parseOpt(json) match {
-        case Some(obj:JObject) => Future.successful(obj)
+      Package(json) match {
+        case Some(p:Package) => Future.successful(p)
         case _ => Future.failed(new Exception("Service did not return a valid JSON object"))
       }
     }
