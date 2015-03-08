@@ -3,10 +3,10 @@ package artifacts
 
 import model._
 
-import scala.xml.NodeSeq
+import scala.xml.Node
 
 object Artifactory {
-  def pom(pkg:Package):NodeSeq = {
+  def pom(pkg:Package):Node = {
     import pkg._
 
     <project>
