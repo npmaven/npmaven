@@ -24,6 +24,7 @@ object NpmRest extends RestHelper with Loggable {
       val sum = sha1(XmlResponse(pom(pkg)).toResponse.data)
       Future.successful(PlainTextResponse(sum, 200))
     }
+    case Sha1(Jar) => jar(pkg).map(b => PlainTextResponse(sha1(b), 200))
     case _ => Future.successful(NotFoundResponse())
   }
 
