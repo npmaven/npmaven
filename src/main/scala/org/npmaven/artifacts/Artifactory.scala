@@ -1,12 +1,18 @@
 package org.npmaven
 package artifacts
 
-import java.io.{OutputStreamWriter, PrintWriter, ByteArrayOutputStream}
+import java.io._
 
 import model._
 
 import java.security.MessageDigest
 import java.util.jar._
+import java.util.zip._
+
+import net.liftweb.common.Loggable
+import org.apache.commons.compress.archivers.ArchiveStreamFactory
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
+import org.apache.commons.compress.utils.IOUtils
 
 import scala.collection.immutable.ListMap
 import scala.concurrent.{ExecutionContext, Future}
@@ -14,7 +20,7 @@ import scala.xml.Node
 
 import dispatch._
 
-object Artifactory {
+object Artifactory extends Loggable {
   def pom(pkg:Package):Node = {
     import pkg._
 
@@ -71,14 +77,55 @@ object Artifactory {
     writeManifest(lines, jar)
   }
 
+  private def extractContents(pkg:Package, content:Array[Byte]):PackageContents = {
+    val tar = new TarArchiveInputStream(new GZIPInputStream(new ByteArrayInputStream(content)))
+    logger.trace("Looking for "+pkg.main)
+
+    Stream.continually {
+      val entry = tar.getNextEntry
+      val bytes = if(entry != null) Some(IOUtils.toByteArray(tar)) else None
+      (entry, bytes)
+    }.takeWhile(_._1 != null)
+      .filterNot(_._1.isDirectory)
+      .foldLeft(PackageContents()) { case (pc, (entry, bytes)) =>
+      val name = entry.getName.split('/').last
+
+      if(name == "bower.js") pc.copy(bower = bytes)
+      else if(Some(name) == pkg.main) pc.copy(main = bytes)
+      else pc
+    }
+
+  }
+
   private def pkgToJar(pkg:Package, content:Array[Byte]):Array[Byte] = {
     val out = new ByteArrayOutputStream()
     val jar = new JarOutputStream(out)
+    val contents = extractContents(pkg, content)
+
+    // Add manifest
     mf(pkg, jar)
+
+    // Add package directory
     jar.putNextEntry(new JarEntry("org/"))
     jar.putNextEntry(new JarEntry("org/npmaven/"))
+    jar.putNextEntry(new JarEntry("org/npmaven/"+pkg.name+"/"))
+
+    contents.main.zip(pkg.main).foreach { case(b,main) =>
+      logger.trace("b.length == "+b.length)
+      jar.putNextEntry(new JarEntry("org/npmaven/"+pkg.name+"/"+main))
+      jar write b
+    }
+
     jar.flush()
     jar.close()
     out.toByteArray
   }
 }
+
+case class PackageContents(
+  main: Option[Array[Byte]] = None,
+  min: Option[Array[Byte]] = None,
+  map: Option[Array[Byte]] = None,
+  bower: Option[Array[Byte]] = None,
+  pkg: Option[Array[Byte]] = None
+)
