@@ -1,4 +1,9 @@
 <configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d [%thread] %-5level %logger{36} - %msg%n%ex{20}</pattern>
+        </encoder>
+    </appender>
 
     <appender class="com.papertrailapp.logback.Syslog4jAppender" name="SYSLOG-TCP">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -17,10 +22,9 @@
     <logger name="net.liftweb" level="warn" />
     <logger name="bootstrap.liftweb" level="info" />
     <logger name="org.npmaven" level="info"/>
-    <logger name="org.npmaven.artifacts" level="trace"/>
-    <logger name="org.npmaven.rest" level="trace"/>
 
     <root level="info">
+        <appender-ref ref="STDOUT" />
         <appender-ref ref="SYSLOG-TCP" />
     </root>
 </configuration>

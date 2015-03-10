@@ -32,7 +32,7 @@ object NpmRest extends RestHelper with Loggable {
     case "repo" :: "npm" :: "org" :: "npmaven" :: name :: version :: artifact :: Nil RestReq _ => {
       val pkg = Package(name, version)
       val art = Artifact(artifact)
-      logger.trace(S.request)
+      logger.info(S.request)
 
       val f = npm.get(pkg)
         .flatMap(p => art.map(a => toResponse(p, a)).openOr(Future.successful(NotFoundResponse())))
