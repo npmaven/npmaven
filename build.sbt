@@ -31,10 +31,11 @@ libraryDependencies ++= {
     "net.liftweb"             %% "lift-webkit"              % liftVersion.value     % "compile",
     "net.databinder.dispatch" %% "dispatch-core"            % "0.11.2"              % "compile",
     "org.apache.commons"      %  "commons-compress"         % "1.9"                 % "compile",
-    "org.eclipse.jetty"       % "jetty-webapp"              % "9.2.7.v20150116"     % "compile",
-    "org.eclipse.jetty"       % "jetty-plus"                % "9.2.7.v20150116"     % "container,test", // For Jetty Config
-    "org.eclipse.jetty.orbit" % "javax.servlet"             % "3.0.0.v201112011016" % "container,test" artifacts Artifact("javax.servlet", "jar", "jar"),
-    "ch.qos.logback"          % "logback-classic"           % "1.0.6"               % "runtime",
+    "org.eclipse.jetty"       %  "jetty-webapp"             % "9.2.7.v20150116"     % "compile",
+    "org.eclipse.jetty"       %  "jetty-plus"               % "9.2.7.v20150116"     % "container,test", // For Jetty Config
+    "org.eclipse.jetty.orbit" %  "javax.servlet"            % "3.0.0.v201112011016" % "container,test" artifacts Artifact("javax.servlet", "jar", "jar"),
+    "ch.qos.logback"          %  "logback-classic"          % "1.0.6"               % "runtime",
+    "com.papertrailapp"       %  "logback-syslog4j"         % "1.0.0"               % "runtime",
     "org.specs2"              %% "specs2-core"              % "3.0"                 % "test",
     "org.specs2"              %% "specs2-matcher-extra"     % "3.0"                 % "test"   // For XmlMatchers
   )

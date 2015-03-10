@@ -12,14 +12,12 @@
         </encoder>
     </appender>
 
-
-
-    <logger name="code.snippet" level="info" />
     <logger name="net.liftweb" level="warn" />
     <logger name="bootstrap.liftweb" level="info" />
     <logger name="org.npmaven" level="info"/>
     <logger name="org.npmaven.artifacts" level="trace"/>
     <logger name="org.npmaven.rest" level="trace"/>
+
     <root level="warn">
         <appender-ref ref="STDOUT" />
     </root>
