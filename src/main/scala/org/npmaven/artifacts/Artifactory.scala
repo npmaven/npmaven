@@ -77,24 +77,21 @@ object Artifactory extends Loggable {
     writeManifest(lines, jar)
   }
 
-  private def extractContents(pkg:Package, content:Array[Byte]):PackageContents = {
+  private def extractContents(pkg:Package, content:Array[Byte]):ListMap[List[String], Array[Byte]] = {
     val tar = new TarArchiveInputStream(new GZIPInputStream(new ByteArrayInputStream(content)))
     logger.trace("Looking for "+pkg.main)
 
-    Stream.continually {
+    val pathToContents = Stream.continually {
       val entry = tar.getNextEntry
       val bytes = if(entry != null) Some(IOUtils.toByteArray(tar)) else None
       (entry, bytes)
     }.takeWhile(_._1 != null)
       .filterNot(_._1.isDirectory)
-      .foldLeft(PackageContents()) { case (pc, (entry, bytes)) =>
-      val name = entry.getName.split('/').last
-
-      if(name == "bower.js") pc.copy(bower = bytes)
-      else if(Some(name) == pkg.main) pc.copy(main = bytes)
-      else pc
+      .filter   (_._2.isDefined)
+      .map { case (entry, bytes) => (entry.getName.split('/').tail.toList, bytes.get)
     }
 
+    ListMap(pathToContents:_*)
   }
 
   private def pkgToJar(pkg:Package, content:Array[Byte]):Array[Byte] = {
@@ -110,10 +107,9 @@ object Artifactory extends Loggable {
     jar.putNextEntry(new JarEntry("org/npmaven/"))
     jar.putNextEntry(new JarEntry("org/npmaven/"+pkg.name+"/"))
 
-    contents.main.zip(pkg.main).foreach { case(b,main) =>
-      logger.trace("b.length == "+b.length)
-      jar.putNextEntry(new JarEntry("org/npmaven/"+pkg.name+"/"+main))
-      jar write b
+    contents.foreach { case(path, bytes) =>
+      jar.putNextEntry(new JarEntry("org/npmaven/"+pkg.name+"/"+(path.mkString("/"))))
+      jar write bytes
     }
 
     jar.flush()
@@ -121,11 +117,3 @@ object Artifactory extends Loggable {
     out.toByteArray
   }
 }
-
-case class PackageContents(
-  main: Option[Array[Byte]] = None,
-  min: Option[Array[Byte]] = None,
-  map: Option[Array[Byte]] = None,
-  bower: Option[Array[Byte]] = None,
-  pkg: Option[Array[Byte]] = None
-)
