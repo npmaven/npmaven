@@ -2,7 +2,31 @@
 
 *npmaven* is a web service for delivering [npm](https://www.npmjs.com/) packages as Maven artifacts
 
-**COMING SOON!**
+Currently we have a walking skeleton running which is happily repackaging your favorite npm modules into maven-ready jars.
+Just add `http://repo.npmaven.org/repo/npm` as a resolver and sepecify your dependencies as `org.maven/<npm_module_name>/<version>`.
+
+For example, add this to your sbt project:
+
+```scala
+resolvers += "npmaven" at "http://repo.npmaven.org/repo/npm"
+libraryDependencies += "org.npmaven" %  "angular" % "1.3.14" % "runtime"
+```
+
+Or this to your gradle project:
+
+```groovy
+repositories {
+    maven {
+        url "http://repo.npmaven.org/repo/npm"
+    }
+}
+
+dependencies {
+    runtime "org.npmaven:angular:1.3.14"
+}
+```
+
+Check it out and let us know what you think!
 
 ## Community
 Pitch in on the effort to deliver *npmaven* in our [Google group]($community$)
