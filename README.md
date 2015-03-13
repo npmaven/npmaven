@@ -3,9 +3,7 @@ npmaven
 
 *npmaven* is a web service for delivering [npm](https://www.npmjs.com/) packages as Maven artifacts
 
-**COMING SOON!**
-
-The scratch work is running at [www.npmaven.org](http://www.npmaven.org), but don't expect anything just yet.
+For details, please visit [npmaven.org](http://npmaven.org).
 
 ## Community
 Pitch in on the effort to deliver *npmaven* in our [Google group](https://groups.google.com/forum/#!forum/npmaven)
