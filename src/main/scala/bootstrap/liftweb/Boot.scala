@@ -53,7 +53,7 @@ class Boot {
       // Furthermore, having html on the end screws it up. Stripping it seems to work great.
       case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _)
         if head.endsWith(".html")
-      => println(head::path); RewriteResponse("site" :: head.substring(0, head.length-5) :: path, ext)
+      => RewriteResponse("site" :: head.substring(0, head.length-5) :: path, ext)
 
     }
 
