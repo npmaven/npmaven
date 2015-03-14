@@ -47,6 +47,14 @@ class Boot {
       case RewriteRequest(ParsePath(head :: path, "html", _, _), _, _)
         if head != "site" // To avoid infinite recursion
       => RewriteResponse("site" :: head :: path, "html")
+
+      // Slaps /site on the front of the version files (or any html file that has extra periods for that matter)
+      // It seems that the extra periods throws off parsing, so ext == "" in this case
+      // Furthermore, having html on the end screws it up. Stripping it seems to work great.
+      case RewriteRequest(ParsePath(head :: path, ext, _, _), _, _)
+        if head.endsWith(".html")
+      => println(head::path); RewriteResponse("site" :: head.substring(0, head.length-5) :: path, ext)
+
     }
 
     LiftRules.statelessDispatch.append(NpmRest)
