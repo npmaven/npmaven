@@ -1,0 +1,7 @@
+## Version 0.1.0
+
+* Initial walking skeleton.
+* Any available npm package can be retrieved as `org.npmaven:<package_name>:<package_version>`
+* POM files are minimal.
+* Jar files contain the entire contents of the npm package within the `org/npmaven/<package_name>` directory.
+* Jar file contains a valid manifest.
