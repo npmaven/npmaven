@@ -3,7 +3,7 @@
 *npmaven* is a web service for delivering [npm](https://www.npmjs.com/) packages as Maven artifacts
 
 Currently we have a walking skeleton running which is happily repackaging your favorite npm modules into maven-ready jars.
-Just add `http://repo.npmaven.org/repo/npm` as a resolver and sepecify your dependencies as `org.npmaven/<npm_module_name>/<version>`.
+Just add `http://repo.npmaven.org/repo/npm` as a resolver and specify your dependencies as `org.npmaven/<npm_module_name>/<version>`.
 
 For example, add this to your sbt project:
 
