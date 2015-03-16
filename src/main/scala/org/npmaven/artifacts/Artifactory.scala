@@ -103,12 +103,13 @@ object Artifactory extends Loggable {
     mf(pkg, jar)
 
     // Add package directory
-    jar.putNextEntry(new JarEntry("org/"))
-    jar.putNextEntry(new JarEntry("org/npmaven/"))
-    jar.putNextEntry(new JarEntry("org/npmaven/"+pkg.name+"/"))
+    val resourcesRoot = "META-INF/resources"
+    jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/"))
+    jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/npmaven/"))
+    jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/npmaven/"+pkg.name+"/"))
 
     contents.foreach { case(path, bytes) =>
-      jar.putNextEntry(new JarEntry("org/npmaven/"+pkg.name+"/"+(path.mkString("/"))))
+      jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/npmaven/"+pkg.name+"/"+(path.mkString("/"))))
       jar write bytes
     }
 
