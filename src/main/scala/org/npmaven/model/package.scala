@@ -10,7 +10,14 @@ package object model {
     main:Option[String] = None,
     license:Option[String] = None,
     dist:Option[Distribution] = None
-  )
+  ) {
+    val asProperties:Map[String, String] = List(
+      Some(("name", name)),
+      Some(("version", version)),
+      main.map(("main", _)),
+      license.map(("license", _))
+    ).flatten.toMap
+  }
 
   object Package {
     import net.liftweb.json
