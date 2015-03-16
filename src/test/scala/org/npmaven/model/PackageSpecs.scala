@@ -1,6 +1,8 @@
 package org.npmaven
 package model
 
+import java.util.Properties
+
 import net.liftweb.http.LiftRules
 import org.specs2.matcher.XmlMatchers
 import org.specs2.mutable.Specification
@@ -49,12 +51,11 @@ object PackageSpecs extends Specification with XmlMatchers {
     }
 
     "write to properties" in {
-      val props = Map(
-        "name" -> "angular",
-        "version" -> "1.3.13",
-        "main" -> "angular.js",
-        "license" -> "MIT"
-      )
+      val props = new Properties()
+      props.setProperty("name", "angular")
+      props.setProperty("version", "1.3.13")
+      props.setProperty("main", "angular.js")
+      props.setProperty("license", "MIT")
 
       angular.asProperties should be equalTo(props)
     }

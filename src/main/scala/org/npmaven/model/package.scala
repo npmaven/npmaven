@@ -1,5 +1,7 @@
 package org.npmaven
 
+import java.util.Properties
+
 import net.liftweb.common.{Empty, Failure, Full, Box}
 
 package object model {
@@ -11,12 +13,18 @@ package object model {
     license:Option[String] = None,
     dist:Option[Distribution] = None
   ) {
-    val asProperties:Map[String, String] = List(
-      Some(("name", name)),
-      Some(("version", version)),
-      main.map(("main", _)),
-      license.map(("license", _))
-    ).flatten.toMap
+    val asProperties:Properties = {
+      val properties = new Properties()
+      List(
+        Some(("name", name)),
+        Some(("version", version)),
+        main.map(("main", _)),
+        license.map(("license", _))
+      ).flatten.foreach{ case (k, v) =>
+        properties.setProperty(k, v)
+      }
+      properties
+    }
   }
 
   object Package {
