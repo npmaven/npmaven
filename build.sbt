@@ -22,7 +22,7 @@ scalacOptions ++= Seq("-deprecation", "-unchecked")
 
 scalacOptions in Test ++= Seq("-Yrangepos") // Recommended for specs2 3.0
 
-liftVersion <<= liftVersion ?? "3.0-M3"
+liftVersion <<= liftVersion ?? "3.0-M4"
 
 libraryDependencies ++= {
   val lv = liftVersion.value
