@@ -2,6 +2,7 @@ package org.npmaven
 package artifacts
 
 import java.io._
+import java.util.Properties
 
 import model._
 
@@ -97,19 +98,23 @@ object Artifactory extends Loggable {
   private def pkgToJar(pkg:Package, content:Array[Byte]):Array[Byte] = {
     val out = new ByteArrayOutputStream()
     val jar = new JarOutputStream(out)
+    val jarPrint = new PrintStream(jar)
     val contents = extractContents(pkg, content)
 
     // Add manifest
     mf(pkg, jar)
 
-    // Add package directory
-    val resourcesRoot = "META-INF/resources"
-    jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/"))
-    jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/npmaven/"))
-    jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/npmaven/"+pkg.name+"/"))
+    val root = "META-INF/resources/org/npmaven/"+pkg.name+"/"
 
-    contents.foreach { case(path, bytes) =>
-      jar.putNextEntry(new JarEntry(s"$resourcesRoot/org/npmaven/"+pkg.name+"/"+(path.mkString("/"))))
+    // Add props file
+    jar.putNextEntry(new JarEntry(s"$root/package.properties"))
+    pkg.asProperties.list(jarPrint)
+    jarPrint.flush()
+
+    // Add each file from the downloaded npm contents
+    contents.foreach { case(pathList, bytes) =>
+      val path = pathList.mkString("/")
+      jar.putNextEntry(new JarEntry(s"$root/$path"))
       jar write bytes
     }
 
