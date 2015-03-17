@@ -43,6 +43,27 @@ package object model {
     def apply(json:JObject):Option[Package] = json.extractOpt[Package]
   }
 
+  case class Bower(
+    name:String,
+    version:String,
+    main:String
+  )
+
+  object Bower {
+    import net.liftweb.json
+    import net.liftweb.json._
+
+    implicit val formats = json.DefaultFormats
+    def apply(string:String):Option[Bower] = parseOpt(string).flatMap { json =>
+      json match {
+        case obj:JObject => apply(obj)
+        case _ => None
+      }
+    }
+    def apply(json:JObject):Option[Bower] = json.extractOpt[Bower]
+    def apply(bytes:Array[Byte]):Option[Bower] = apply(new String(bytes, "iso-8859-1"))
+  }
+
   sealed trait Artifact
   case object Pom extends Artifact
   case object Jar extends Artifact
