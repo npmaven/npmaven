@@ -1,3 +1,4 @@
 ## Version 0.2.0
 
 * Moved jar contents to `META-INF/resources` for servlet 3.0 compatibility.
+* Added `package.properties` to the jar contents, including parsing out the Bower main js file name.
