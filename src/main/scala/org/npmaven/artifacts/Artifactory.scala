@@ -105,9 +105,16 @@ object Artifactory extends Loggable {
 
     val root = "META-INF/resources/org/npmaven/"+pkg.name+"/"
 
+    // Get main.bower from bower.json
+    val pkgWithBower = contents
+      .find(_._1.lastOption == Some("bower.json"))
+      .flatMap { case (path, bytes) => Bower(bytes) }
+      .map( b => pkg.copy(mainBower = Some(b.main)))
+      .getOrElse(pkg)
+
     // Add props file
     jar.putNextEntry(new JarEntry(s"$root/package.properties"))
-    pkg.asProperties.list(jarPrint)
+    pkgWithBower.asProperties.list(jarPrint)
     jarPrint.flush()
 
     // Add each file from the downloaded npm contents
