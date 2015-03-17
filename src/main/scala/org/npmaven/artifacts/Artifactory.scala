@@ -103,7 +103,7 @@ object Artifactory extends Loggable {
     // Add manifest
     mf(pkg, jar)
 
-    val root = "META-INF/resources/org/npmaven/"+pkg.name+"/"
+    val root = "META-INF/resources/org/npmaven/"+pkg.name
 
     // Get main.bower from bower.json
     val pkgWithBower = contents
