@@ -80,7 +80,6 @@ object Artifactory extends Loggable {
 
   private def extractContents(pkg:Package, content:Array[Byte]):ListMap[List[String], Array[Byte]] = {
     val tar = new TarArchiveInputStream(new GZIPInputStream(new ByteArrayInputStream(content)))
-    logger.trace("Looking for "+pkg.main)
 
     val pathToContents = Stream.continually {
       val entry = tar.getNextEntry

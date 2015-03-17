@@ -11,14 +11,16 @@ package object model {
     version:String,
     main:Option[String] = None,
     license:Option[String] = None,
-    dist:Option[Distribution] = None
+    dist:Option[Distribution] = None,
+    mainBower:Option[String] = None
   ) {
     val asProperties:Properties = {
       val properties = new Properties()
       List(
         Some(("name", name)),
         Some(("version", version)),
-        main.map(("main", _)),
+        main.map(("main.npm", _)),
+        mainBower.map(("main.bower", _)),
         license.map(("license", _))
       ).flatten.foreach{ case (k, v) =>
         properties.setProperty(k, v)

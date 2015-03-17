@@ -54,10 +54,13 @@ object PackageSpecs extends Specification with XmlMatchers {
       val props = new Properties()
       props.setProperty("name", "angular")
       props.setProperty("version", "1.3.13")
-      props.setProperty("main", "angular.js")
+      props.setProperty("main.npm", "angular.js")
+      props.setProperty("main.bower", "./angular.js")
       props.setProperty("license", "MIT")
 
-      angular.asProperties should be equalTo(props)
+      val pkg = angular.copy(mainBower = Some("./angular.js"))
+
+      pkg.asProperties should be equalTo(props)
     }
   }
 }
