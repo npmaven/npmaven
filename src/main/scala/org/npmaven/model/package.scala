@@ -46,7 +46,8 @@ package object model {
   case class Bower(
     name:String,
     version:String,
-    main:String
+    main:String,
+    scripts:List[String]
   )
 
   object Bower {
