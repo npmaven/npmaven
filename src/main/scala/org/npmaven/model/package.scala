@@ -12,7 +12,8 @@ package object model {
     main:Option[String] = None,
     license:Option[String] = None,
     dist:Option[Distribution] = None,
-    bowerMain:Option[String] = None
+    bowerMain:Option[String] = None,
+    bowerScripts:List[String] = List.empty
   ) {
     val asProperties:Properties = {
       val properties = new Properties()
@@ -22,9 +23,11 @@ package object model {
         main.map(("main", _)),
         bowerMain.map(("bower.main", _)),
         license.map(("license", _))
-      ).flatten.foreach{ case (k, v) =>
-        properties.setProperty(k, v)
-      }
+      ).flatten
+        .++ (bowerScripts.zipWithIndex.map { case (js, i) => (s"bower.scripts.$i", js) })
+        .foreach{ case (k, v) =>
+          properties.setProperty(k, v)
+        }
       properties
     }
   }
