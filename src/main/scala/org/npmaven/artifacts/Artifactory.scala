@@ -109,7 +109,7 @@ object Artifactory extends Loggable {
     val pkgWithBower = contents
       .find(_._1.lastOption == Some("bower.json"))
       .flatMap { case (path, bytes) => Bower(bytes) }
-      .map( b => pkg.copy(mainBower = Some(b.main)))
+      .map( b => pkg.copy(bowerMain = Some(b.main)))
       .getOrElse(pkg)
 
     // Add props file
