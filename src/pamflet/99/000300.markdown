@@ -1,4 +1,4 @@
-## Version 0.2.0
+## Version 0.3.0
 
 * Changed `package.properties` to have key names `main` and `bower.main` rather than `main.npm` and `main.bower` respectively.
 * Added `bower.scripts` to `package.properties`.
